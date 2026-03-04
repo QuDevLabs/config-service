@@ -13,6 +13,10 @@ spec:
     metadata:
       labels:
         app: config-service
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /actuator/prometheus
+        prometheus.io/port: "8888"
     spec:
       containers:
         - name: config-service
@@ -27,3 +31,15 @@ spec:
           env:
             - name: BPL_JVM_THREAD_COUNT
               value: "50"
+          livenessProbe: # 配置存活探针
+            httpGet: # 使用HTTP GET请求以获取存活状态
+              path: /actuator/health/liveness # 获取存活状态所要调用的端点
+              port: 8888
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8888
+            initialDelaySeconds: 5
+            periodSeconds: 15
