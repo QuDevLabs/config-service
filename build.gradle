@@ -25,7 +25,9 @@ ext {
 
 dependencies {
     implementation 'org.springframework.cloud:spring-cloud-config-server'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
+    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
     runtimeOnly "io.opentelemetry.javaagent:opentelemetry-javaagent:${otelVersion}"
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -35,6 +37,10 @@ dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
     }
+}
+
+springBoot {
+    buildInfo()
 }
 
 bootBuildImage {
